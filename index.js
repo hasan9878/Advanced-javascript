@@ -198,7 +198,7 @@ function addTodoWithAllFeaturesAndInputClear() {
   const text = input.value.trim();
   if (!text) return;
   if (isDuplicate(text)) {
-    alert("এই টাস্কটি ইতিমধ্যে তালিকায় রয়েছে!");
+    alert("Alredy exist in this list");
     return;
   }
   const li = document.createElement("li");
