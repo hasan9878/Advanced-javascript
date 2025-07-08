@@ -150,3 +150,44 @@ input.addEventListener("keypress", function (e) {
   if (e.key === "Enter") addTodoWithAllFeatures();
 });
 // Commit 8: Add edit functionality
+
+
+// --- 5. Duplicate Prevention ---
+function isDuplicate(text) {
+  const items = document.querySelectorAll("#todo-list li span");
+  for (let item of items) {
+    if (item.textContent.toLowerCase() === text.toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
+}
+const originalAddTodoWithAllFeatures = addTodoWithAllFeatures;
+function addTodoWithAllFeaturesAndDuplicatePrevention() {
+  const text = input.value.trim();
+  if (!text) return;
+  if (isDuplicate(text)) {
+    alert("এই টাস্কটি ইতিমধ্যে তালিকায় রয়েছে!");
+    return;
+  }
+  const li = document.createElement("li");
+  li.className = "flex justify-between items-center bg-gray-100 p-2 rounded";
+  const span = document.createElement("span");
+  span.textContent = text;
+  span.className = "flex-grow";
+  li.append(span);
+  addDoneButton(li, span);
+  addEditButton(li, span);
+  addDeleteButton(li);
+  todoList.appendChild(li);
+}
+addBtn.removeEventListener("click", originalAddTodoWithAllFeatures);
+addBtn.addEventListener("click", addTodoWithAllFeaturesAndDuplicatePrevention);
+input.removeEventListener("keypress", function (e) {
+  if (e.key === "Enter") originalAddTodoWithAllFeatures();
+});
+input.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") addTodoWithAllFeaturesAndDuplicatePrevention();
+});
+// Commit 9: Add duplicate prevention
+
