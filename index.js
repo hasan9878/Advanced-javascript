@@ -189,5 +189,36 @@ input.removeEventListener("keypress", function (e) {
 input.addEventListener("keypress", function (e) {
   if (e.key === "Enter") addTodoWithAllFeaturesAndDuplicatePrevention();
 });
-// Commit 9: Add duplicate prevention
+// 
 
+
+// --- 6. Input Clear ---
+const originalAddTodoWithAllFeaturesAndDuplicatePrevention = addTodoWithAllFeaturesAndDuplicatePrevention;
+function addTodoWithAllFeaturesAndInputClear() {
+  const text = input.value.trim();
+  if (!text) return;
+  if (isDuplicate(text)) {
+    alert("এই টাস্কটি ইতিমধ্যে তালিকায় রয়েছে!");
+    return;
+  }
+  const li = document.createElement("li");
+  li.className = "flex justify-between items-center bg-gray-100 p-2 rounded";
+  const span = document.createElement("span");
+  span.textContent = text;
+  span.className = "flex-grow";
+  li.append(span);
+  addDoneButton(li, span);
+  addEditButton(li, span);
+  addDeleteButton(li);
+  todoList.appendChild(li);
+  input.value = "";
+}
+addBtn.removeEventListener("click", originalAddTodoWithAllFeaturesAndDuplicatePrevention);
+addBtn.addEventListener("click", addTodoWithAllFeaturesAndInputClear);
+input.removeEventListener("keypress", function (e) {
+  if (e.key === "Enter") originalAddTodoWithAllFeaturesAndDuplicatePrevention();
+});
+input.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") addTodoWithAllFeaturesAndInputClear();
+});
+// Commit 10: Add input clear after adding todo
