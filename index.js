@@ -92,3 +92,61 @@ input.addEventListener("keypress", function (e) {
   if (e.key === "Enter") addTodoWithDeleteAndDone();
 });
 // Commit 7: Add mark as done functionality
+
+
+// --- 4. Edit Todo ---
+function addEditButton(li, span) {
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.className = "text-yellow-600 hover:underline mr-2";
+  editBtn.onclick = () => {
+    const oldText = span.textContent;
+    const inputField = document.createElement("input");
+    inputField.type = "text";
+    inputField.value = oldText;
+    inputField.className = "flex-grow p-1 border rounded";
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.className = "text-blue-600 hover:underline ml-2";
+    li.innerHTML = "";
+    li.append(inputField, saveBtn);
+    saveBtn.onclick = () => {
+      const newText = inputField.value.trim();
+      if (!newText) return;
+      span.textContent = newText;
+      li.innerHTML = "";
+      li.className = "flex justify-between items-center bg-gray-100 p-2 rounded";
+      li.append(span);
+      addDoneButton(li, span);
+      addEditButton(li, span);
+      addDeleteButton(li);
+    };
+    inputField.focus();
+  };
+  li.append(editBtn);
+}
+// Patch addTodoWithDeleteAndDone to include edit button
+const originalAddTodoWithDeleteAndDone = addTodoWithDeleteAndDone;
+function addTodoWithAllFeatures() {
+  const text = input.value.trim();
+  if (!text) return;
+  const li = document.createElement("li");
+  li.className = "flex justify-between items-center bg-gray-100 p-2 rounded";
+  const span = document.createElement("span");
+  span.textContent = text;
+  span.className = "flex-grow";
+  li.append(span);
+  addDoneButton(li, span);
+  addEditButton(li, span);
+  addDeleteButton(li);
+  todoList.appendChild(li);
+}
+addBtn.removeEventListener("click", originalAddTodoWithDeleteAndDone);
+addBtn.addEventListener("click", addTodoWithAllFeatures);
+input.removeEventListener("keypress", function (e) {
+  if (e.key === "Enter") originalAddTodoWithDeleteAndDone();
+});
+input.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") addTodoWithAllFeatures();
+});
+// Commit 8: Add edit functionality
